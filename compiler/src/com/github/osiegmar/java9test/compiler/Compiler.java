@@ -56,7 +56,9 @@ public class Compiler {
         return apiBuildOutput;
     }
 
-    private static void compileApp(final Path apiBuildDir, final boolean genericPath) throws IOException {
+    private static void compileApp(final Path apiBuildDir, final boolean genericPath)
+        throws IOException {
+
         final StandardJavaFileManager fileManager = COMPILER.getStandardFileManager(
             null, null, StandardCharsets.UTF_8);
 
@@ -65,10 +67,16 @@ public class Compiler {
 
         if (genericPath) {
             // set a generic module path for all compiled modules
-            fileManager.setLocationFromPaths(StandardLocation.MODULE_PATH, List.of(Paths.get("build")));
+            fileManager.setLocationFromPaths(StandardLocation.MODULE_PATH,
+                List.of(Paths.get("build")));
         } else {
             // directly set the module path for the compiled api module
-            fileManager.setLocationForModule(StandardLocation.MODULE_PATH, MODULE_NAME_API, List.of(apiBuildDir));
+            fileManager.setLocationForModule(StandardLocation.MODULE_PATH, MODULE_NAME_API,
+                List.of(apiBuildDir));
+
+            // works, but it's a hack:
+//            fileManager.setLocationForModule(StandardLocation.SYSTEM_MODULES, MODULE_NAME_API,
+//                List.of(apiBuildDir));
         }
 
         final Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjects(
